@@ -83,7 +83,7 @@ function handleShowResults(){
   if (roundsCounter === 0){
     for(let i=0; i < productArray.length; i++){
       let li = document.createElement('li');
-      li.textContent = `${productArray[i].name} had ${productArray[i].viewCounter} votes, and was seen ${productArray[i].viewCounter} times.`;
+      li.textContent = `${productArray[i].name} had ${productArray[i].clickCounter} votes, and was seen ${productArray[i].viewCounter} times.`;
       resultsList.appendChild(li);
       resultsBtn.removeEventListener('click', handleShowResults);
     }
