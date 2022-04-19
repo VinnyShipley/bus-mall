@@ -70,64 +70,54 @@ function handleClick(event){
   for(let i = 0; i < productArray.length; i++){
     if(imgClicked === productArray[i].name){
       productArray[i].clickCounter++;
+      renderImg();
     }
   }
   roundsCounter--;
   if (roundsCounter === 0){
     imgContainer.removeEventListener('click', handleClick);
+    renderproductChart();
   }
-  renderImg();
 }
 
-function handleShowResults(){
-  if (roundsCounter === 0){
-    for(let i=0; i < productArray.length; i++){
-      let li = document.createElement('li');
-      li.textContent = `${productArray[i].name} had ${productArray[i].clickCounter} votes, and was seen ${productArray[i].viewCounter} times.`;
-      resultsList.appendChild(li);
-      resultsBtn.removeEventListener('click', handleShowResults);
-    }
-  }
-}
+
+
 
 // ***********EVENT LISTENERS************
 
 imgContainer.addEventListener('click', handleClick);
-
-resultsBtn.addEventListener('click', handleShowResults);
-
-
-
-
 
 
 //********EXECUTABLE CODE*********
 
 
 //prints three random non-repeating images to the page
+
+let indexArray = [];
+
 function renderImg(){
-  let imageOneIndex = getRandomIndex();
-  let imageTwoIndex = getRandomIndex();
-  let imageThreeIndex = getRandomIndex();
-
-  
-  while((imageOneIndex === imageTwoIndex) || (imageTwoIndex === imageThreeIndex) || (imageOneIndex === imageThreeIndex)){
-    imageOneIndex = getRandomIndex();
-    imageTwoIndex = getRandomIndex();
-    imageThreeIndex = getRandomIndex();
+  while (indexArray.length < 6) {
+    let randomNumber = getRandomIndex();
+    if (!indexArray.includes(randomNumber)){
+      indexArray.push(randomNumber);
+    }
   }
+
+  let tempOne = indexArray.shift();
+  let tempTwo = indexArray.shift();
+  let tempThree = indexArray.shift();
   
-  imageOne.src = productArray[imageOneIndex].img;
-  imageOne.alt = productArray[imageOneIndex].name;
-  productArray[imageOneIndex].viewCounter++;
+  imageOne.src = productArray[tempOne].img;
+  imageOne.alt = productArray[tempOne].name;
+  productArray[tempOne].viewCounter++;
 
-  imageTwo.src = productArray[imageTwoIndex].img;
-  imageTwo.alt = productArray[imageTwoIndex].name;
-  productArray[imageTwoIndex].viewCounter++;
+  imageTwo.src = productArray[tempTwo].img;
+  imageTwo.alt = productArray[tempTwo].name;
+  productArray[tempTwo].viewCounter++;
 
-  imageThree.src = productArray[imageThreeIndex].img;
-  imageThree.alt = productArray[imageThreeIndex].name;
-  productArray[imageThreeIndex].viewCounter++;
+  imageThree.src = productArray[tempThree].img;
+  imageThree.alt = productArray[tempThree].name;
+  productArray[tempThree].viewCounter++;
 
 }
 
@@ -136,5 +126,71 @@ function getRandomIndex(){
   let randomInt = Math.floor(randomFloat);
   return randomInt;
 }
+
+
+//********CANVAS REFERENCE***********
+
+let ctx = document.getElementById('myChart');
+
+
+
+//************CHART RENDER****************
+
+function renderproductChart() {
+
+  // Creating arrays to help with labels and dataset
+  let productNames = [];
+  let productVotes = [];
+  let productViews = [];
+
+  for(let i = 0; i < productArray.length; i++){
+    productNames.push(productArray[i].name);
+    productVotes.push(productArray[i].clickCounter);
+    productViews.push(productArray[i].viewCounter);
+  }
+
+  let myChartObj = {
+    type: 'bar',
+    data: {
+      labels: productNames, // product names
+      datasets: [{
+        label: '# of Votes', // # votes and # views
+        data: productVotes,
+        backgroundColor: [
+          'blue'
+        ],
+        borderColor: [
+          'blue'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of Views', // # votes and # views
+        data: productViews, // the actual view or votes
+        backgroundColor: [
+          'black'
+        ],
+        borderColor: [
+          'black'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+
+  new Chart(ctx, myChartObj);
+}
+
+
+
+
 
 renderImg();
