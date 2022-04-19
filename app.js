@@ -2,7 +2,7 @@
 
 // *********GLOBAL VARIABLES***********
 
-let roundsCounter = 5;
+let roundsCounter = 25;
 let productArray = [];
 
 
