@@ -2,8 +2,19 @@
 
 // *********GLOBAL VARIABLES***********
 
-let roundsCounter = 25;
+let roundsCounter = 15;
 let productArray = [];
+
+
+//**************Getting data out of local storage************
+
+let retrievedProduct = localStorage.getItem('product');
+
+
+
+//************* Parsing the data back to usable state********
+
+let parsedProduct = JSON.parse(retrievedProduct);
 
 
 
@@ -17,26 +28,35 @@ function Product(name, fileExtension = 'jpg'){
   productArray.push(this);
 } 
 
+//************Instatiating New Products**********
+
 
 // Product list
-new Product('bag');
-new Product('banana');
-new Product('bathroom');
-new Product('boots');
-new Product('breakfast');
-new Product('bubblegum');
-new Product('chair');
-new Product('cthulhu');
-new Product('dog-duck');
-new Product('dragon');
-new Product('pen');
-new Product('pet-sweep');
-new Product('scissors');
-new Product('sweep', 'png');
-new Product('tauntaun');
-new Product('unicorn');
-new Product('water-can');
-new Product('wine-glass');
+
+if(retrievedProduct){
+  productArray = parsedProduct;
+}  else{
+    new Product('bag');
+    new Product('banana');
+    new Product('bathroom');
+    new Product('boots');
+    new Product('breakfast');
+    new Product('bubblegum');
+    new Product('chair');
+    new Product('cthulhu');
+    new Product('dog-duck');
+    new Product('dragon');
+    new Product('pen');
+    new Product('pet-sweep');
+    new Product('scissors');
+    new Product('sweep', 'png');
+    new Product('tauntaun');
+    new Product('unicorn');
+    new Product('water-can');
+    new Product('wine-glass');
+  }
+
+
 
 
 // ********DOM REFERENCES*********
@@ -51,10 +71,6 @@ let imageTwo = document.getElementById('img-two');
 
 
 let imageThree = document.getElementById('img-three');
-
-
-let resultsList = document.getElementById('display-results');
-let resultsBtn = document.getElementById('results-btn')
 
 
 
@@ -77,6 +93,19 @@ function handleClick(event){
   if (roundsCounter === 0){
     imgContainer.removeEventListener('click', handleClick);
     renderproductChart();
+
+
+    //*********Local Storage Work*************** 
+
+    // Stringifying the data 
+
+    let stringifiedProduct = JSON.stringify(productArray);
+    
+    //Setting it into Local Storage
+    
+    localStorage.setItem('product', stringifiedProduct);
+    
+    console.log(stringifiedProduct);
   }
 }
 
@@ -184,13 +213,8 @@ function renderproductChart() {
       }
     }
   };
-
-
   new Chart(ctx, myChartObj);
 }
 
-
-
-
-
+console.log('Does the gnarled dragon meat give you the creeps when you see it, like it does to me?')
 renderImg();
